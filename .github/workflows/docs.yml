@@ -19,6 +19,10 @@ jobs:
 
       - name: Build Rustdocs
         run: cargo doc --no-deps --document-private-items
+        
+      - name: Debug - List contents of target/doc
+        run: |
+          ls -la "target/doc"
 
       - name: Configure Git
         run: |
@@ -34,7 +38,7 @@ jobs:
           git reset --hard
           
           # Remove existing files in the branch
-          git rm -rf .
+          # git rm -rf .
           
           # Copy generated Rustdocs to the branch
           cp -r "$DOC_DIR"/* .
