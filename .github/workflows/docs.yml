@@ -32,26 +32,27 @@ jobs:
       - name: Create and Push to GitHub Pages Branch
         run: |
           DOC_DIR="target/doc"
-          
-          # Create an orphaned branch for GitHub Pages (e.g., gh-pages)
-          git checkout --orphan gh-pages
-          git reset --hard
-          
-          # Remove existing files in the branch
+          BRANCH_NAME="gh-pages"
+
+          # Remove the branch if it already exists
+          git branch -D "$BRANCH_NAME" || true
+
+          # Create a new orphaned branch for GitHub Pages
+          git checkout --orphan "$BRANCH_NAME"
+
+          # Remove any existing files in the branch
           git rm -rf .
-          
+
           # Copy generated Rustdocs to the branch
           cp -r "$DOC_DIR"/* .
-          
+
           # Commit and push changes
           git add .
           git commit -m "Update Rustdocs"
-          git push origin gh-pages --force
+          git branch -M "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME" --force
 
       - name: Cleanup
         run: |
           # Switch back to the main branch
           git checkout main
-          
-          # Remove the orphaned branch
-          git branch -D gh-pages
