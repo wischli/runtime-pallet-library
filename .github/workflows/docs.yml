@@ -1,58 +1,58 @@
-name: Rustdoc CI
+# name: Rustdoc CI
 
-on:
-  push:
-    branches:
-      - chore/gh-actions-docs
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# on:
+#   push:
+#     branches:
+#       - chore/gh-actions-docs
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Set up Rust toolchain
-        run: |
-          TOOLCHAIN_VERSION=$(grep 'channel =' rust-toolchain.toml | awk -F'"' '{print $2}')
-          rustup toolchain install "$TOOLCHAIN_VERSION"
+#       - name: Set up Rust toolchain
+#         run: |
+#           TOOLCHAIN_VERSION=$(grep 'channel =' rust-toolchain.toml | awk -F'"' '{print $2}')
+#           rustup toolchain install "$TOOLCHAIN_VERSION"
 
-      - name: Build Rustdocs
-        run: cargo doc --no-deps --document-private-items
+#       - name: Build Rustdocs
+#         run: cargo doc --no-deps --document-private-items
         
-      - name: Debug - List contents of target/doc
-        run: |
-          ls -la "target/doc"
+#       - name: Debug - List contents of target/doc
+#         run: |
+#           ls -la "target/doc"
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+#       - name: Configure Git
+#         run: |
+#           git config --global user.name "GitHub Actions"
+#           git config --global user.email "actions@github.com"
 
-      - name: Create and Push to GitHub Pages Branch
-        run: |
-          DOC_DIR="target/doc"
-          BRANCH_NAME="gh-pages"
+#       - name: Create and Push to GitHub Pages Branch
+#         run: |
+#           DOC_DIR="target/doc"
+#           BRANCH_NAME="gh-pages"
 
-          # Remove the branch if it already exists
-          git branch -D "$BRANCH_NAME" || true
+#           # Remove the branch if it already exists
+#           git branch -D "$BRANCH_NAME" || true
 
-          # Create a new orphaned branch for GitHub Pages
-          git checkout --orphan "$BRANCH_NAME"
+#           # Create a new orphaned branch for GitHub Pages
+#           git checkout --orphan "$BRANCH_NAME"
 
-          # Remove any existing files in the branch
-          git rm -rf .
+#           # Remove any existing files in the branch
+#           git rm -rf .
 
-          # Copy generated Rustdocs to the branch
-          cp -r "$DOC_DIR"/* .
+#           # Copy generated Rustdocs to the branch
+#           cp -r "$DOC_DIR"/* .
 
-          # Commit and push changes
-          git add .
-          git commit -m "Update Rustdocs"
-          git branch -M "$BRANCH_NAME"
-          git push origin "$BRANCH_NAME" --force
+#           # Commit and push changes
+#           git add .
+#           git commit -m "Update Rustdocs"
+#           git branch -M "$BRANCH_NAME"
+#           git push origin "$BRANCH_NAME" --force
 
-      - name: Cleanup
-        run: |
-          # Switch back to the main branch
-          git checkout main
+#       - name: Cleanup
+#         run: |
+#           # Switch back to the main branch
+#           git checkout main
