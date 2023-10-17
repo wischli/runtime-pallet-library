@@ -38,7 +38,7 @@ jobs:
           git reset --hard
           
           # Remove existing files in the branch
-          # git rm -rf .
+          git rm -rf .
           
           # Copy generated Rustdocs to the branch
           cp -r "$DOC_DIR"/* .
