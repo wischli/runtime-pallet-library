@@ -11,13 +11,13 @@ jobs:
     env:
       RUSTDOCFLAGS: "-D warnings"
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Set up Rust toolchain
         run: |
           TOOLCHAIN_VERSION=$(grep 'channel =' rust-toolchain.toml | awk -F'"' '{print $2}')
           rustup toolchain install "$TOOLCHAIN_VERSION"
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       - name: Build Documentation
         id: build_docs
